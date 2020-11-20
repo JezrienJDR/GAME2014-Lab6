@@ -30,6 +30,8 @@ public class PossumBehaviour : MonoBehaviour
     public RampDirection rampDir;
 
 
+    public ContactFilter2D filter;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,9 +43,27 @@ public class PossumBehaviour : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        HasLOS();
         _LookInFront();
         _LookAhead();
         _Move();
+    }
+
+    private void HasLOS()
+    {
+        var size = new Vector2(13.0f, 2.0f);
+
+
+
+        RaycastHit2D[] arrayOfHits = { };
+
+        var hit = Physics2D.BoxCast(transform.position, size, 0.0f, Vector2.left * transform.localScale.x, filter, arrayOfHits);
+
+        foreach(var h in arrayOfHits)
+        {
+            Debug.Log(h.transform.gameObject.name);
+        }
+
     }
 
     private void _Move()
